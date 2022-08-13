@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <title>Verify</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aes-js/3.1.2/index.min.js" integrity="sha512-LOqfKFwH2W3jeb0NzXcImFlSyoL7hjsWbZvIeKNOaZw1gFw+yKTE/QUDGLit2KWdd57qd6IgMDkppK2tkwIEhA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            let c='cab0953580ba67fb844e93b950c9f40379e212b90ce8648fc7c2d9b8445ffaa8c2fd69ed2d59b89e9a0c83b6da71f44e0eb50d1c45ecce62f5edaa6720a1d6d7'
+            let len='59'
+            len=parseInt(len)
+            let password=prompt('password: ','')
+            let key=aesjs.utils.hex.toBytes(sha256(password))
+            let iv=aesjs.utils.hex.toBytes(sha256(key)).slice(16)
+            let cipher=new aesjs.ModeOfOperation.cbc(key,iv)
+            c=aesjs.utils.hex.toBytes(c)
+            let m=cipher.decrypt(c).slice(0,len)
+            alert(aesjs.utils.utf8.fromBytes(m))
+        </script>
+    </head>
+    <body style="margin:0px;">
+        
+    </body>
+</html>

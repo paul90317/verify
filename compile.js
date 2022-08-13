@@ -1,0 +1,17 @@
+let fs=require('fs')
+let aesjs=require('aes-js')
+let sha256=require('js-sha256').sha256
+let config=fs.readFileSync('config.json','utf-8')
+config=JSON.parse(config)
+let key=aesjs.utils.hex.toBytes(sha256(config.password))
+let iv=aesjs.utils.hex.toBytes(sha256(key)).slice(16)
+let cipher=new aesjs.ModeOfOperation.cbc(key,iv)
+let m=aesjs.utils.utf8.toBytes(config.message)
+let len=m.length+(16-m.length%16)%16
+let data=new Uint8Array(len)
+data.set(m)
+let c=cipher.encrypt(data)
+data=fs.readFileSync('object.htm','utf-8')
+data=data.replace('{c}',aesjs.utils.hex.fromBytes(c))
+data=data.replace('{len}',m.length.toString())
+fs.writeFileSync('index.htm',data)
